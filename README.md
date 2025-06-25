@@ -1,70 +1,161 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# 💻 Courses UI — ReactJS Frontend
 
-## Available Scripts
+This is the **frontend application** built using ReactJS for the **Courses Management System**. It is part of the internship assignment for **Application Software Centre, IIT Bombay**.
 
-In the project directory, you can run:
+The frontend consumes REST APIs provided by the backend Spring Boot service and allows users to manage courses and course delivery instances.
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 📦 Features
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Create a new course with one or more prerequisites
+- View all courses and their prerequisites
+- Delete a course (if it is not used as a prerequisite)
+- Create a course delivery instance (year and semester)
+- View all course deliveries in a given year and semester
+- Delete course instances
+- Visual UI indicators for dependency-based restrictions
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🧰 Tech Stack
 
-### `npm run build`
+- ReactJS (v18)
+- Axios
+- React Router DOM
+- TailwindCSS / Bootstrap (choose as per setup)
+- Docker
+- GitHub Actions for CI/CD
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🚀 Getting Started
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Clone the Repository
 
-### `npm run eject`
+```bash
+git clone https://github.com/<your-username>/courses-ui.git
+cd courses-ui
+````
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Install Dependencies
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+npm install
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Run the App
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```bash
+npm start
+```
 
-## Learn More
+Visit `http://localhost:3000` in your browser. Make sure the backend is running at `http://localhost:8080`.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+---
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 🐳 Docker Instructions
 
-### Code Splitting
+### Build Docker Image
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```bash
+docker build -t <your-dockerhub-username>/courses-ui .
+```
 
-### Analyzing the Bundle Size
+### Push to DockerHub
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```bash
+docker push <your-dockerhub-username>/courses-ui
+```
 
-### Making a Progressive Web App
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## 📦 Docker Compose (With Backend)
 
-### Advanced Configuration
+Here is a sample `docker-compose.yml` file to run both frontend and backend together:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```yaml
+version: '3'
+services:
+  backend:
+    image: <your-dockerhub-username>/courses-api
+    ports:
+      - "8080:8080"
 
-### Deployment
+  frontend:
+    image: <your-dockerhub-username>/courses-ui
+    ports:
+      - "3000:3000"
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+To run locally:
 
-### `npm run build` fails to minify
+```bash
+docker-compose up
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
+
+## 🔁 GitHub Actions Workflow
+
+Add this to `.github/workflows/docker-image.yml` in the frontend repo:
+
+```yaml
+name: Docker Build & Push
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: <your-dockerhub-username>/courses-ui:latest
+```
+
+> Make sure to set `DOCKER_USERNAME` and `DOCKER_PASSWORD` as GitHub repository secrets.
+
+---
+
+## 🧠 Design Justifications
+
+* **ReactJS** provides modular, scalable component-based architecture.
+* **Axios** enables clean separation of API logic and frontend logic.
+* **Conditional rendering** helps in handling prerequisites and deletion constraints visually.
+* **Docker** ensures consistency across environments.
+* **GitHub Actions** automates image builds and pushes for faster iteration.
+
+---
+
+## 👤 Author
+
+**Shubhanshu Tiwari**
+📧 Email: [shubhant31@gmail.com](mailto:shubhant31@gmail.com)
+🔗 GitHub: [Shubhanshut31](https://github.com/Shubhanshut310)
+
+---
+
+## 📄 License
+
+This project is created for the internship application at the **Application Software Centre, IIT Bombay**.
+
+```
+
+
